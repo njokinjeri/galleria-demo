@@ -1,6 +1,6 @@
 # Galleria Site Demo
 
-![Galleria site preview](/design/desktop-design.jpg)
+![Galleria site preview](./public/design/desktop-design.jpg)
 
 Your users should be able to:
 
