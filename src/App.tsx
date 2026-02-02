@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Header from "./components/Header"
 import Loader from "./components/Loader";
 import Gallery from "./components/Gallery";
@@ -8,8 +8,9 @@ import SlideShow from "./components/SlideShow";
 
 export default function App() {
     const [loading, setLoading] = useState<boolean>(true);
-    const [paintings, setPaintings] = useState<Painting[]>([])
-    const [currentIndex, setCurrentIndex] = useState<number | null>(null)
+    const [paintings, setPaintings] = useState<Painting[]>([]);
+    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
     useEffect(() => {
         fetch('data/gallery.json')
@@ -23,7 +24,47 @@ export default function App() {
             setLoading(false);
         })
     }, []);
+
+    const togglePlay = () => {
+        if (currentIndex === null) {
+            setCurrentIndex(0);
+            setIsPlaying(true)
+        } else {
+            setIsPlaying(!isPlaying)
+        }
+    }
+
+    const handleNext = useCallback(() => {
+        setCurrentIndex((prev) => {
+            if (prev === null || prev === paintings.length - 1) {
+                return 0;
+            }
+            return prev + 1;
+        })
+    }, [paintings.length])
+
     
+    useEffect(() => {
+        let interval: number | undefined;
+
+        if (isPlaying && currentIndex !== null) {
+            interval = window.setInterval(() => {
+                handleNext();
+            }, 5000)
+        }
+        return () => clearInterval(interval)
+    }, [isPlaying ,currentIndex, handleNext])
+    
+
+    const handlePrev = () => {
+        setCurrentIndex((prev) => {
+            if (prev === null || prev === 0) {
+                return paintings.length - 1
+            }
+            return prev - 1
+        })
+    }
+
     if (loading) return (
         <main className="min-h-screen flex flex-col items-center justify-center">
             <Loader />
@@ -31,46 +72,30 @@ export default function App() {
         </main>
     );
 
-    const startSlideshow = () => {
-        setCurrentIndex(currentIndex === null ? 0 : null)
-    }
-
-    const handlePrev = () => {
-        if (currentIndex === 0 || currentIndex === null) {
-            setCurrentIndex(paintings.length - 1)
-        } else {
-            setCurrentIndex(currentIndex - 1)
-        }
-    }
-
-    const handleNext = () => {
-        if (currentIndex === paintings.length - 1 || currentIndex === null ) {
-            setCurrentIndex(0)
-        } else {
-            setCurrentIndex(currentIndex + 1)
-        }
-    }
-
     const progress = currentIndex !== null
                     ? ((currentIndex + 1) / paintings.length) * 100
-                    : 0
-
+                    : 0;
     return (
-        <main className="min-h-screen">
+        <main className="min-h-screen bg-amber-800">
             <Header 
-                onStartSlideshow={startSlideshow}
-                isSlideshowActive={currentIndex !== null}
+                onStartSlideshow={togglePlay}
+                isSlideshowActive={isPlaying}
             />
             {currentIndex === null ? (
                 <Gallery 
                     data={paintings}
-                    onSelect={(index) => setCurrentIndex(index)}
-                />
+                    onSelect={(index) => {
+                        setCurrentIndex(index);
+                        setIsPlaying(true); 
+                }} />
             ) : (
                 <SlideShow painting={paintings[currentIndex]}>
                     <Slide 
                         painting={paintings[currentIndex]}
-                        onClose={() => setCurrentIndex(null)}
+                        onClose={() => { 
+                            setCurrentIndex(null);
+                            setIsPlaying(false);
+                        }}
                         onNext={handleNext}
                         onPrev={handlePrev}
                         progress={progress}
