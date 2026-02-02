@@ -16,7 +16,7 @@ export default function Slide({ painting, onClose, onNext, onPrev, progress}: Sl
     const [showLightbox, setShowLightbox] = useState(false);
 
     return (
-        <article className="min-h-screen flex flex-col gap-8 relative px-6 pb-40 lg:px-10 lg:pb-24 max-w-7xl mx-auto bg-white">
+        <article className="min-h-screen w-full flex flex-col gap-8 relative px-6 pb-40 lg:px-10 lg:pb-24 max-w-7xl mx-auto bg-white overflow-x-hidden lg:overflow-x-visible">
             <div>
                 <button 
                     onClick={onClose}
@@ -25,7 +25,7 @@ export default function Slide({ painting, onClose, onNext, onPrev, progress}: Sl
             </div>
             <section className="pt-4 grid grid-cols-1 lg:grid-cols-12 lg:gap-x-10">
                 <section className="relative lg:col-span-8">
-                    <div className="relative">
+                    <div className="relative inline-block w-full">
                         <img 
                             src={painting.images.hero.small}
                             srcSet={`${painting.images.hero.small} 768w, ${painting.images.hero.large} 1280w`}
@@ -43,7 +43,10 @@ export default function Slide({ painting, onClose, onNext, onPrev, progress}: Sl
                             VIEW IMAGE
                         </button>
                     </div>
-                    <div className="absolute -bottom-20 left-0 bg-white p-10 lg:left-auto lg:-right-35 lg:top-0 lg:bottom-auto w-[90%] md:w-[60%] lg:h-fit shadow-sm lg:shadow-none">
+                    <div className="absolute -bottom-20 left-0 bg-white p-10 
+                                    md:left-auto md:right-0 md:top-0 md:bottom-auto 
+                                    lg:left-auto lg:-right-25 lg:top-0 lg:bottom-auto 
+                                    w-[90%] md:w-[60%] lg:w-120 shadow-sm lg:shadow-none">
                         <h1 className="text-2xl md:text-5xl font-bold leading-tight text-black">
                             {painting.name}
                         </h1>
@@ -52,17 +55,19 @@ export default function Slide({ painting, onClose, onNext, onPrev, progress}: Sl
                         </h2>
                     </div>
                 </section>
-                <section className="relative lg:col-span-4 flex flex-col items-center lg:items-start pt-24 lg:pt-0">
-                    <div className="absolute left-0">
+                <section className="relative lg:col-span-4 flex flex-col items-start md:justify-center lg:items-start pt-24 lg:pt-0">
+                    <div className="absolute left-0 md:left-auto md:right-10 md:-top-37.5 lg:top-auto lg:bottom-2 lg:-left-45 z-30">
                         <img 
                             src={painting.artist.image} 
                             alt={painting.artist.name} 
                             className="size-24 md:size-32 object-cover" 
                         />
                     </div>
-                    <span className="absolute right-0 text-[8rem] md:text-[10rem] text-gray-200/60 font-bold z-10 select-none">{painting.year}</span>
+                    <span className="absolute right-0 text-[8rem] md:text-[14rem]  text-gray-200/60 font-bold z-10 select-none
+                                     md:right-auto md:left-0 md:-top-10 lg:text-[10rem] lg:left-auto lg:right-0 lg:-top-15" 
+                    >{painting.year}</span>
                     <div className="relative">
-                        <p className="text-gray-500 text-base/8 font-extrabold relative z-10 pt-35 px-4 lg:px-0"
+                        <p className="text-gray-500 text-base/8 font-extrabold relative z-10 pt-36 md:pt-10 lg:pt-20 px-4 lg:px-0"
                         >{painting.description}</p>
                         <a 
                             href={painting.source} 
