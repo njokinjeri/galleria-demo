@@ -75,12 +75,20 @@ export default function App() {
     const progress = currentIndex !== null
                     ? ((currentIndex + 1) / paintings.length) * 100
                     : 0;
+
+    const goToGallery = () => {
+        setCurrentIndex(null);
+        setIsPlaying(false);
+    };
+
     return (
-        <main className="min-h-screen bg-amber-800">
+        <main className="w-screen min-h-screen font-libre bg-white flex flex-col gap-4">
             <Header 
                 onStartSlideshow={togglePlay}
                 isSlideshowActive={isPlaying}
+                onLogoClick={goToGallery}
             />
+            <hr className="border border-gray-400/30"/>
             {currentIndex === null ? (
                 <Gallery 
                     data={paintings}
