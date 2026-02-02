@@ -21,12 +21,12 @@ export default function SlideshowControl({ name, artist, onNext, onPrev, progres
                     <h3>{name}</h3>
                     <p>{artist}</p>
                 </div>
-                <div>
+                <div className="flex items-center gap-6 md:gap-10">
                     <button onClick={onPrev} aria-label="Previous Slide">
-                        <img src={iconBack} alt="" />
+                        <img src={iconBack} alt="" className="size-10" />
                     </button>
                     <button onClick={onNext} aria-label="Next Slide">
-                        <img src={iconNext} alt="" />
+                        <img src={iconNext} alt="" className='size-10' />
                     </button>
                 </div>
             </div>
