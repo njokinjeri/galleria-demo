@@ -1,19 +1,9 @@
-import { useEffect } from "react";
-
 type LightboxProps = {
     image: string;
     onClose: () => void
 }
 
 export default function Lightbox({ image, onClose }: LightboxProps) {
-
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, []);
-
     return (
         <div className="fixed inset-0 z-100 flex flex-col items-center justify-start bg-black/90 p-6 md:p-12 animate-in fade-in duration-300">
             
